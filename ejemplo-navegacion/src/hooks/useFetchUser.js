@@ -65,6 +65,48 @@ const useFetchUser = () => {
     fetchUsuarios();
     console.log("actualizando en useEffect");
   }, []);
+
+
+// Editar usuario
+const handleEditar = async (id, nombre, edad, correo) => {
+  try {
+    const response = await fetch(`https://retoolapi.dev/zZhXYF/movil/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ nombre, edad, correo }),
+    });
+
+    if (response.ok) {
+      Alert.alert("Actualizado", "Usuario actualizado correctamente");
+      fetchUsuarios();
+    } else {
+      Alert.alert("Error", "No se pudo actualizar el usuario");
+    }
+  } catch (error) {
+    console.error(error);
+    Alert.alert("Error", "Ocurrió un error al actualizar");
+  }
+};
+
+// Eliminar usuario
+const handleEliminar = async (id) => {
+  try {
+    const response = await fetch(`https://retoolapi.dev/zZhXYF/movil/${id}`, {
+      method: "DELETE",
+    });
+    if (response.ok) {
+      Alert.alert("Eliminado", "Usuario eliminado correctamente");
+      fetchUsuarios();
+    } else {
+      Alert.alert("Error", "No se pudo eliminar el usuario");
+    }
+  } catch (error) {
+    console.error(error);
+    Alert.alert("Error", "Ocurrió un error al eliminar");
+  }
+};
  
   return {
     nombre,
@@ -77,6 +119,8 @@ const useFetchUser = () => {
     usuarios,
     loading,
     fetchUsuarios,
+    handleEliminar,
+    handleEditar,
   };
 };
  

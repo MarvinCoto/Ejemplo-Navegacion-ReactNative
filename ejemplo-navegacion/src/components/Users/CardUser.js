@@ -1,56 +1,55 @@
-import { StyleSheet, Text, View } from "react-native";
- 
+import { StyleSheet, Text, View, Button } from "react-native";
+import React, { useState } from "react";
+import EditModal from "./ModalUser";
+import useFetchUser from "../../hooks/useFetchUser";
+
 const CardUser = ({ user }) => {
+  const { handleEliminar, handleEditar } = useFetchUser();
+
+  const [modalVisible, setModalVisible] = useState(false);
+  const [editNombre, setEditNombre] = useState(user.nombre);
+  const [editEdad, setEditEdad] = useState(user.edad.toString());
+  const [editCorreo, setEditCorreo] = useState(user.correo);
+
+  const openModal = () => setModalVisible(true);
+  const closeModal = () => setModalVisible(false);
+
+  const guardarCambios = () => {
+    handleEditar(user.id, editNombre, parseInt(editEdad), editCorreo);
+    closeModal();
+  };
+
   return (
     <View style={styles.card}>
       <Text style={styles.cardTitle}>{user.nombre}</Text>
       <Text style={styles.cardText}>Edad: {user.edad}</Text>
       <Text style={styles.cardText}>Correo: {user.correo}</Text>
+
+      <View style={styles.buttonsRow}>
+        <Button title="Editar" onPress={openModal} />
+        <Button title="Eliminar" onPress={() => handleEliminar(user.id)} color="red" />
+      </View>
+
+      <EditModal
+        visible={modalVisible}
+        onClose={closeModal}
+        user={{ nombre: editNombre, edad: editEdad, correo: editCorreo }}
+        onChangeNombre={setEditNombre}
+        onChangeEdad={setEditEdad}
+        onChangeCorreo={setEditCorreo}
+        onSave={guardarCambios}
+      />
     </View>
   );
 };
- 
+
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#EAD8C0",
-    paddingHorizontal: 20,
-    paddingTop: 40,
-  },
-  listContainer: {
-    paddingBottom: 30,
-  },
-  title: {
-    fontSize: 26,
-    fontWeight: "bold",
-    color: "#5C3D2E",
-    textAlign: "center",
-    marginBottom: 5,
-  },
-  subtitle: {
-    fontSize: 16,
-    fontWeight: "500",
-    color: "#5C3D2E",
-    textAlign: "center",
-    marginBottom: 10,
-  },
-  counterText: {
-    fontSize: 16,
-    fontWeight: "600",
-    color: "#3B2C24",
-    textAlign: "center",
-    marginBottom: 10,
-  },
   card: {
     backgroundColor: "#FFF",
     borderRadius: 12,
     padding: 20,
     marginVertical: 10,
     elevation: 4,
-    shadowColor: "#000",
-    shadowOpacity: 0.2,
-    shadowOffset: { width: 1, height: 2 },
-    shadowRadius: 4,
   },
   cardTitle: {
     fontSize: 20,
@@ -62,6 +61,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#3B2C24",
   },
+  buttonsRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 10,
+  },
 });
- 
+
 export default CardUser;

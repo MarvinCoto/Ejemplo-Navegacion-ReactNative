@@ -16,7 +16,7 @@ export default function Home({ navigation }) {
         y un tab menu en una aplicación móvil de react native
       </Text>
  
-      <Buttons text="ver todos los usuarios" action={irShowUsers} />
+      <Buttons text="Ver todos los usuarios" action={irShowUsers} />
     </View>
   );
 }
